@@ -28,16 +28,19 @@
         return str.replace(/\w\S*/g, function (word) {
           return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase()
         })
+      },
+      getOrigin: function () {
+        return (process.env.NODE_ENV === 'development') ? 'http://localhost:3001' : 'https://blooming-forest-83104.herokuapp.com'
       }
     },
     created: function () {
       this.$Progress.start()
-      this.$http.get('http://localhost:3001/api/news.sources')
+      this.$http.get(this.getOrigin() + '/api/news.sources')
         .then(response => {
           return response.data.sources
         })
         .then(sources => {
-          this.$http.get('http://localhost:3001/api/news.articles?source=' + sources[0].id + '&sortBy=top')
+          this.$http.get(this.getOrigin() + '/api/news.articles?source=' + sources[0].id + '&sortBy=top')
             .then(response => {
               return response.data
             })
